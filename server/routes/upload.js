@@ -11,10 +11,10 @@ const router = express.Router();
 // Todo: Change file upload limit to 5? MB when understanding why openshift server is not able to handle files larger than 1MB. nginx client_max_body_size?  
 
 // Configure the file upload middleware
-const maxFileSizeMB = 1;
+const maxFileSizeMB = 5;
 const sizeLimitMessage = `File size limit exceeded. Maximum file size is ${maxFileSizeMB} MB.`
 
-const maxFileSize = maxFileSizeMB * 1024 * 1024; // 1 MB
+const maxFileSize = maxFileSizeMB * 1024 * 1024; // File size in MB
 const uploadOptions = { limits: { fileSize: maxFileSize }, debug:true, useTempFiles:true, abortOnLimit:true, responseOnLimit:sizeLimitMessage}
 router.use( fileUpload(uploadOptions) );
 
