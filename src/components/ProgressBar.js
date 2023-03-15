@@ -7,17 +7,35 @@ import ConfigProvider from './ConfigProvider';
 const WIZARD_STEP_NAMES = [ "Introduction", "Dataset part 1", "Dataset part 2", "Funding", "Contributors", "Experiments" ];
 const NUM_STEPS = WIZARD_STEP_NAMES.length;
 
-const customDot = (dot, { status, index }) => (
-  <Popover
-    content={
-      <span>
-        Step {index+1} of {NUM_STEPS} - Status: {status}
-      </span>
-    }
-  >
-    {dot}
-  </Popover>
-);
+const customDot = (dot, { status, index }) => {
+
+  // Update status message
+  switch (status) {
+    case 'process':
+      status = 'In progress';
+      break;
+    case 'finish':
+      status = 'Completed';
+      break;
+    case 'wait':
+      status = 'Incomplete';
+      break;
+    default:
+      status = 'Incomplete';
+  }
+
+  return (
+    <Popover
+      content={
+        <span>
+          Step {index+1} of {NUM_STEPS} - Status: {status}
+        </span>
+      }
+    >
+      {dot}
+    </Popover>
+  );
+};
 //const description = 'Incomplete';
 
 const ProgressBar = ({step, status, onChanged}) => {
