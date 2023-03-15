@@ -1,3 +1,4 @@
+import React from 'react';
 import { DownloadOutlined, UploadOutlined, DeleteOutlined, MenuOutlined } from '@ant-design/icons';
 import { Dropdown, Space } from 'antd';
 import ConfigProvider from './ConfigProvider';
@@ -22,6 +23,19 @@ const items = [
 
 const DropdownMenu = ({handleMenuSelection}) => {
 
+  const [isCollapsed, setIsCollapsed] = React.useState(false);
+
+  React.useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth < 700) {
+        setIsCollapsed(true)
+      } else {
+        setIsCollapsed(false)
+      }
+    }
+    window.addEventListener('resize', handleResize)
+  })
+
   const handleMenuClick = (item) => { 
     handleMenuSelection(items[item.key - 1].label) }
   
@@ -37,8 +51,8 @@ const DropdownMenu = ({handleMenuSelection}) => {
   return (
   <Space wrap>
       <ConfigProvider componentSize={"large"}>
-        <Dropdown.Button menu={menuProps} onClick={handleButtonClick} icon={<MenuOutlined />}>
-        Download form data
+        <Dropdown.Button menu={menuProps} onClick={handleButtonClick} icon={<MenuOutlined />} title={'Download form data'}>
+        { isCollapsed ? <DownloadOutlined /> : "Download form data" }
         </Dropdown.Button>
       </ConfigProvider>
   </Space>
