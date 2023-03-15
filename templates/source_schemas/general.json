@@ -10,7 +10,7 @@
     "ticketNumber": {
       "title": "Ticket number",
       "type": "string",
-      "description": "If you have a ticket number, please enter it here. The ticket number can be found in the subject line in email correspondence with the curation team, e.g Ticket#4815613."
+      "description": "This field might be pre-filled. If not, you can find the ticket number in the subject line of email correspondence with the curation team, e.g Ticket#4815613. If you have not yet received a ticket number, you can leave this field blank."
     },
     "contactperson": {
       "title": "Contact person",
