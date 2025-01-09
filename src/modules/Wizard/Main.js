@@ -111,6 +111,14 @@ class Wizard extends React.Component {
       if (formStates === undefined) {
         if (iFormName === 'general') {
           formData.set(iFormName, {ticketNumber: this.ticketNumber})
+        } else if (iFormName === 'experiment') {
+          formData.set(iFormName, {
+            "datasetVersion": {
+              "keywordsIntro": null,
+              "techniqueIntro": null,
+              "experimentalApproachIntro": null
+            }
+          })
         } else {
           formData.set(iFormName, {})
         }
