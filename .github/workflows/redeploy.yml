@@ -1,0 +1,33 @@
+name: Build and Redeploy Docker Image
+
+on:
+  push:
+    branches: [ "main" ]
+    paths-ignore:
+        - '*.md'
+        - '.github/workflows/**'
+
+  # Allows for manually running this workflow from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build-push-redeploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build and Push Docker Image
+        run: |
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin docker-registry.ebrains.eu
+          docker build -t docker-registry.ebrains.eu/ebrains-data-curation/metadata-wizard:${{ github.sha }} .
+          docker push docker-registry.ebrains.eu/ebrains-data-curation/metadata-wizard:${{ github.sha }}
+      - name: Write Kubeconfig to File
+        run: |
+          mkdir -p ${{ runner.temp }}/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" > ${{ runner.temp }}/.kube/kubeconfig.yaml
+      - name: Update Kubernetes Deployment
+        env: 
+          KUBECONFIG: ${{ runner.temp }}/.kube/kubeconfig.yaml
+        run: |
+          kubectl set image deployment/metadata-wizard container-0=docker-registry.ebrains.eu/ebrains-data-curation/metadata-wizard:${{ github.sha }} --namespace=metadata-wizard
+          
